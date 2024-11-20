@@ -1,0 +1,40 @@
+local player = game:GetService("Players").LocalPlayer
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local remoteEvent = replicatedStorage:WaitForChild("ReplicaRemoteEvents"):WaitForChild("Replica_ReplicaSignal")
+
+local function showMessage(message, duration)
+    local playerGui = player:WaitForChild("PlayerGui")
+    local screenGui = Instance.new("ScreenGui")
+    local textLabel = Instance.new("TextLabel")
+
+    screenGui.Parent = playerGui
+    screenGui.Name = "AutoCollectMessage"
+
+    textLabel.Parent = screenGui
+    textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
+    textLabel.Position = UDim2.new(0.25, 0, 0.4, 0)
+    textLabel.Text = message
+    textLabel.TextScaled = true
+    textLabel.BackgroundTransparency = 0.5
+    textLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.Font = Enum.Font.SourceSansBold
+
+    task.wait(duration)
+    screenGui:Destroy()
+end
+
+local function collectMoney()
+    local args = {
+        [1] = 9,
+        [2] = "collectMoney",
+        [3] = player
+    }
+    remoteEvent:FireServer(unpack(args))
+end
+
+showMessage("Auto collect ativo.", 5)
+
+while wait(1) do
+    collectMoney()
+end
